@@ -1,0 +1,122 @@
+{
+  "name": "digitalrcs-vscode-ai-bridge",
+  "displayName": "DigitalRCS VS Code AI Bridge",
+  "description": "Local HTTP bridge that lets desktop applications call VS Code Language Model API providers.",
+  "version": "0.0.7",
+  "publisher": "digitalrcs",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digitalrcs/DigitalRCS-AI-Bridge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digitalrcs/DigitalRCS-AI-Bridge/issues"
+  },
+  "homepage": "https://github.com/digitalrcs/DigitalRCS-AI-Bridge#readme",
+  "keywords": [
+    "vscode",
+    "language-model-api",
+    "ai",
+    "bridge",
+    "http",
+    "desktop"
+  ],
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:digitalrcsBridge.start",
+    "onCommand:digitalrcsBridge.stop",
+    "onCommand:digitalrcsBridge.status",
+    "onCommand:digitalrcsBridge.copyToken",
+    "onCommand:digitalrcsBridge.tempTest"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "digitalrcsBridge.start",
+        "title": "DigitalRCS AI Bridge: Start"
+      },
+      {
+        "command": "digitalrcsBridge.stop",
+        "title": "DigitalRCS AI Bridge: Stop"
+      },
+      {
+        "command": "digitalrcsBridge.status",
+        "title": "DigitalRCS AI Bridge: Show Status"
+      },
+      {
+        "command": "digitalrcsBridge.copyToken",
+        "title": "DigitalRCS AI Bridge: Copy Bearer Token"
+      },
+      {
+        "command": "digitalrcsBridge.tempTest",
+        "title": "DigitalRCS AI Bridge: Run Smoke Test"
+      }
+    ],
+    "configuration": {
+      "title": "DigitalRCS AI Bridge",
+      "properties": {
+        "digitalrcs.aiBridge.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Start the local bridge when the extension activates."
+        },
+        "digitalrcs.aiBridge.host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Host interface for the local bridge. Keep the loopback default unless remote access is explicitly required."
+        },
+        "digitalrcs.aiBridge.port": {
+          "type": "number",
+          "default": 8787,
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "TCP port for the local bridge."
+        },
+        "digitalrcs.aiBridge.sharedToken": {
+          "type": "string",
+          "default": "",
+          "description": "Optional bearer token. When empty, a random token is generated and stored in workspace state."
+        },
+        "digitalrcs.aiBridge.defaultModel": {
+          "type": "string",
+          "default": "",
+          "description": "Optional VS Code language model ID used when DigitalRCS omits model or sends Auto. When empty, the bridge uses the first model returned by VS Code."
+        },
+        "digitalrcs.aiBridge.maxRequestBytes": {
+          "type": "number",
+          "default": 5242880,
+          "minimum": 1024,
+          "description": "Maximum JSON request body size in bytes."
+        },
+        "digitalrcs.aiBridge.maxOutputTokens": {
+          "type": "number",
+          "default": 65536,
+          "minimum": 256,
+          "maximum": 262144,
+          "description": "Maximum tokens requested from the language model. The model or server can apply a lower cap."
+        },
+        "digitalrcs.aiBridge.qwenNoThinkPrefix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Prepend /no_think to requests sent to Qwen-family VS Code language models. This opt-in VS Code LM API-only mitigation can help provider extensions that otherwise route final text through reasoning output."
+        },
+        "digitalrcs.aiBridge.requestsPerMinute": {
+          "type": "number",
+          "default": 30,
+          "minimum": 1,
+          "description": "Maximum authenticated requests accepted per rolling minute."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
